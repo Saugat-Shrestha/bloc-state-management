@@ -1,4 +1,5 @@
-import 'package:blocexample/home/ui/Home_Page.dart';
+import 'package:blocexample/feature/home/ui/Home_Page.dart';
+
 import 'package:flutter/material.dart';
 
 void main() {

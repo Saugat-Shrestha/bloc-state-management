@@ -1,6 +1,8 @@
-import 'package:blocexample/cart/ui/cart.dart';
-import 'package:blocexample/home/bloc/home_bloc.dart';
-import 'package:blocexample/wishlist/ui/wishlist.dart';
+
+import 'package:blocexample/feature/cart/ui/cart.dart';
+import 'package:blocexample/feature/home/bloc/home_bloc.dart';
+import 'package:blocexample/feature/wishlist/ui/wishlist.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
