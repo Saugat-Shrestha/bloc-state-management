@@ -1,6 +1,6 @@
-
 import 'package:blocexample/feature/cart/ui/cart.dart';
 import 'package:blocexample/feature/home/bloc/home_bloc.dart';
+import 'package:blocexample/feature/home/ui/product_tile_widget.dart';
 import 'package:blocexample/feature/wishlist/ui/wishlist.dart';
 
 import 'package:flutter/material.dart';
@@ -14,6 +14,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  @override
+  void initState() {
+    homeBloc.add(HomeInitialEvent());
+    super.initState();
+  }
+
   final HomeBloc homeBloc = HomeBloc();
   @override
   Widget build(BuildContext context) {
@@ -37,26 +43,54 @@ class _HomeState extends State<Home> {
         }
       },
       builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.teal,
-            title: Text("Saugat"),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  homeBloc.add(HomeWishlistButtonNavigateEvent());
-                },
-                icon: Icon(Icons.favorite_outline),
+        switch (state.runtimeType) {
+          case HomeLoadingState:
+            return Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
               ),
-              IconButton(
-                onPressed: () {
-                  homeBloc.add(HomeCartButtonNavigateEvent());
-                },
-                icon: Icon(Icons.shopping_bag_outlined),
+            );
+            break;
+
+          case HomeLoadedSuccessState:
+            final successState = state as HomeLoadedSuccessState;
+            return Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.teal,
+                title: Text("Saugat"),
+                actions: [
+                  IconButton(
+                    onPressed: () {
+                      homeBloc.add(HomeWishlistButtonNavigateEvent());
+                    },
+                    icon: Icon(Icons.favorite_outline),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      homeBloc.add(HomeCartButtonNavigateEvent());
+                    },
+                    icon: Icon(Icons.shopping_bag_outlined),
+                  ),
+                ],
               ),
-            ],
-          ),
-        );
+              body: ListView.builder(
+                itemCount: successState.products.length,
+                itemBuilder: (context, index) {
+                  return ProductTileWidget(
+                      productDataModel: successState.products[index]);
+                },
+              ),
+            );
+            break;
+          case HomeErrorState:
+            return Scaffold(
+              body: Center(
+                child: Text("Error"),
+              ),
+            );
+          default:
+            return SizedBox();
+        }
       },
     );
   }
